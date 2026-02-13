@@ -66,6 +66,22 @@ Audit of the codebase against **The Ultimate MERN Project Prompt**.
 
 ---
 
+## 5. Key Products (Researched) — All in seed
+
+| Product | Status |
+|---------|--------|
+| Vertical Gardening Frames | ✅ `Vertical Gardening Frame (Wall Mount)` |
+| Trellis Nets | ✅ `Trellis Net (5x10 feet)` |
+| Pest Management: Neem Oil | ✅ `Organic Neem Oil Spray (500ml)` |
+| Pest Management: Yellow Sticky Traps | ✅ `Yellow Sticky Traps (Pack of 20)` |
+| PH & Moisture Meters | ✅ `PH & Moisture Meter (Digital)` |
+| Expandable Clay Pebbles | ✅ `Expandable Clay Pebbles (10L)` |
+| Containers (UV bags, Ceramic, Mud pots) | ✅ In seed |
+| Growing Media (mix, Cocopeat, Vermicompost) | ✅ In seed |
+| Irrigation (Drip, NFT, Smart timers) | ✅ In seed |
+
+---
+
 ## How to run & test
 
 1. **Backend:** `cd server && npm run dev`

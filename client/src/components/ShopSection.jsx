@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Leaf, ArrowRight } from "lucide-react";
 
 const categories = [
   { name: "Containers", slug: "containers", desc: "UV grow bags, ceramic & mud pots", icon: "🪴" },
@@ -12,18 +13,23 @@ const categories = [
 
 export default function ShopSection() {
   return (
-    <section id="shop" className="scroll-mt-20 py-20 bg-white">
+    <section id="shop" className="scroll-mt-24 py-24 bg-gradient-organic">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          transition={{ duration: 0.5 }}
+          className="text-center mb-14"
         >
-          <h2 className="text-3xl font-bold text-forest-green-900 mb-2">
+          <span className="inline-flex items-center gap-2 rounded-full bg-forest-green-100 px-4 py-2 text-sm font-semibold text-forest-green-700 mb-4">
+            <Leaf className="w-4 h-4" />
+            Product catalog
+          </span>
+          <h2 className="font-display text-4xl font-bold text-forest-green-900 sm:text-5xl mb-4">
             Shop Products
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-forest-green-700/90 max-w-2xl mx-auto text-lg">
             Everything you need for urban rooftop farming — from containers to smart irrigation.
           </p>
         </motion.div>
@@ -35,13 +41,19 @@ export default function ShopSection() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.05 }}
-                className="p-6 rounded-xl border border-forest-green-100 bg-forest-green-50/50 hover:shadow-lg hover:border-forest-green-200 transition-all cursor-pointer group"
+                transition={{ duration: 0.4, delay: idx * 0.06 }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="card-organic group p-8 h-full flex flex-col"
               >
-                <span className="text-4xl mb-3 block group-hover:scale-110 transition-transform">{cat.icon}</span>
-                <h3 className="font-semibold text-forest-green-900">{cat.name}</h3>
-                <p className="text-sm text-gray-600 mt-1">{cat.desc}</p>
-                <p className="text-sm text-forest-green-600 mt-3 font-medium group-hover:underline">View products →</p>
+                <span className="text-5xl mb-4 block transition-transform duration-300 group-hover:scale-110">
+                  {cat.icon}
+                </span>
+                <h3 className="font-display text-xl font-bold text-forest-green-900 mb-2">{cat.name}</h3>
+                <p className="text-forest-green-700/80 text-sm flex-1">{cat.desc}</p>
+                <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-forest-green-600 group-hover:gap-3 transition-all">
+                  View products
+                  <ArrowRight className="w-4 h-4" />
+                </span>
               </motion.div>
             </Link>
           ))}
@@ -51,10 +63,11 @@ export default function ShopSection() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-center mt-8"
+          className="text-center mt-12"
         >
-          <Link to="/shop" className="btn-primary inline-block">
+          <Link to="/shop" className="btn-primary inline-flex gap-2">
             Browse all products
+            <ArrowRight className="w-5 h-5" />
           </Link>
         </motion.div>
       </div>

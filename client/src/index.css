@@ -7,16 +7,32 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-white text-gray-900 antialiased;
+    @apply bg-cream text-forest-green-900 antialiased;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-forest-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-forest-green-700 transition-colors duration-200;
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-forest-green-600 px-6 py-3.5 font-semibold text-white shadow-soft transition-all duration-300 hover:bg-forest-green-700 hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0;
   }
-
   .btn-secondary {
-    @apply bg-white text-forest-green-600 border-2 border-forest-green-600 px-6 py-3 rounded-lg font-medium hover:bg-forest-green-50 transition-colors duration-200;
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-forest-green-600 bg-white px-6 py-3.5 font-semibold text-forest-green-700 transition-all duration-300 hover:bg-forest-green-50 hover:border-forest-green-700 hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .card-organic {
+    @apply rounded-3xl border border-forest-green-100 bg-white/90 shadow-soft backdrop-blur-sm transition-all duration-300 hover:shadow-organic hover:border-forest-green-200;
+  }
+  .input-organic {
+    @apply w-full rounded-xl border border-forest-green-200 bg-white/80 px-4 py-3.5 text-forest-green-900 placeholder-forest-green-400 transition-all duration-200 focus:border-forest-green-500 focus:bg-white focus:ring-2 focus:ring-forest-green-500/20 focus:outline-none;
   }
 }
+
+/* Stagger children animation helper */
+.stagger-children > * {
+  animation: fade-in 0.5s ease-out backwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }

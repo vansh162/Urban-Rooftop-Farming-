@@ -1,122 +1,138 @@
 import { motion } from "framer-motion";
-import { Leaf } from "lucide-react";
+import { Leaf, ArrowRight, Sparkles } from "lucide-react";
 
-/**
- * Hero Section - High-end landing page for Leafinity
- * Features biophilic design with smooth animations
- */
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
+  },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0 },
+};
+
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-forest-green-50 to-forest-green-100 overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-forest-green-300 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-wood-300 rounded-full blur-3xl"></div>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero bg-leaf-pattern">
+      {/* Organic blobs */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.2, 0.15] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-32 -left-32 h-[28rem] w-[28rem] rounded-full bg-forest-green-400 blur-3xl"
+        />
+        <motion.div
+          animate={{ scale: [1.1, 1, 1.1], opacity: [0.12, 0.18, 0.12] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-0 right-0 h-96 w-96 translate-x-1/3 translate-y-1/3 rounded-full bg-wood-400 blur-3xl"
+        />
+        <motion.div
+          animate={{ y: [0, -20, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute right-1/4 top-1/3 h-64 w-64 rounded-full bg-forest-green-200/40 blur-3xl"
+        />
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pb-24">
-        <div className="max-w-4xl mx-auto text-center">
-          {/* Logo/Icon */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-8"
-          >
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-forest-green-600 rounded-full mb-6">
-              <Leaf className="w-10 h-10 text-white" />
-            </div>
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 pb-28 pt-4">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="max-w-4xl mx-auto text-center"
+        >
+          <motion.div variants={item} className="mb-8">
+            <motion.div
+              animate={{ rotate: [0, -5, 5, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="inline-flex items-center justify-center w-24 h-24 rounded-3xl bg-forest-green-600 shadow-organic"
+            >
+              <Leaf className="w-12 h-12 text-white drop-shadow-sm" strokeWidth={1.5} />
+            </motion.div>
           </motion.div>
 
-          {/* Main Heading */}
+          <motion.div variants={item} className="mb-4 flex justify-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-forest-green-200 bg-white/80 px-4 py-2 text-sm font-medium text-forest-green-700 shadow-soft backdrop-blur-sm">
+              <Sparkles className="w-4 h-4 text-forest-green-500" />
+              Urban Rooftop Farming
+            </span>
+          </motion.div>
+
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-forest-green-900 mb-6 leading-tight"
+            variants={item}
+            className="font-display text-5xl font-bold tracking-tight text-forest-green-900 sm:text-6xl lg:text-7xl xl:text-8xl leading-[1.1] mb-6"
           >
-            Transform Your Rooftop
+            Transform Your
             <br />
-            <span className="text-forest-green-600">Into a Green Oasis</span>
+            <span className="bg-gradient-to-r from-forest-green-600 to-forest-green-500 bg-clip-text text-transparent">
+              Rooftop
+            </span>
+            <br />
+            <span className="text-forest-green-700">Into a Green Oasis</span>
           </motion.h1>
 
-          {/* Subheading */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="text-xl sm:text-2xl text-gray-700 mb-12 max-w-2xl mx-auto leading-relaxed"
+            variants={item}
+            className="mx-auto max-w-2xl text-lg sm:text-xl text-forest-green-700/90 leading-relaxed mb-10"
           >
-            Leafinity brings urban rooftop farming to your doorstep. Grow fresh, organic produce
-            with our expert-designed systems and premium products.
+            Leafinity brings expert-designed systems and premium products to your doorstep. Grow fresh, organic produce with installation, maintenance, and harvest support.
           </motion.p>
 
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-          >
+          <motion.div variants={item} className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <motion.a
               href="#booking"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-primary text-lg px-8 py-4 shadow-lg"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              className="btn-primary text-lg px-8 py-4 gap-2"
             >
-              Get Started
+              Get Your Quote
+              <ArrowRight className="w-5 h-5" />
             </motion.a>
             <motion.a
               href="#shop"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
               className="btn-secondary text-lg px-8 py-4"
             >
               Shop Products
             </motion.a>
           </motion.div>
 
-          {/* Feature Pills - extra margin so they don't overlap the scroll arrow */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-            className="mt-16 mb-4 flex flex-wrap justify-center gap-3 sm:gap-4"
+            variants={item}
+            className="mt-16 mb-6 flex flex-wrap justify-center gap-3"
           >
-            {["Expert Installation", "Monthly Maintenance", "Harvest Support"].map(
-              (feature, idx) => (
-                <motion.div
-                  key={feature}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: 0.9 + idx * 0.1 }}
-                  className="px-6 py-3 bg-white/80 backdrop-blur-sm rounded-full text-forest-green-700 font-medium shadow-sm border border-forest-green-200"
-                >
-                  {feature}
-                </motion.div>
-              )
-            )}
+            {["Expert Installation", "Monthly Maintenance", "Harvest Support"].map((feature, idx) => (
+              <motion.span
+                key={feature}
+                whileHover={{ scale: 1.05, y: -2 }}
+                className="rounded-2xl border border-forest-green-200/80 bg-white/90 px-5 py-2.5 text-sm font-semibold text-forest-green-700 shadow-soft backdrop-blur-sm"
+              >
+                {feature}
+              </motion.span>
+            ))}
           </motion.div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        transition={{ delay: 1.2 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 border-2 border-forest-green-600 rounded-full flex justify-center"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-forest-green-500/60"
         >
           <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-1 h-3 bg-forest-green-600 rounded-full mt-2"
-          ></motion.div>
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="mt-2 h-2 w-1 rounded-full bg-forest-green-500"
+          />
         </motion.div>
       </motion.div>
     </section>

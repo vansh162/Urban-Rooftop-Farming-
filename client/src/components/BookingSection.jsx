@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { booking as bookingApi, upload } from "../api/client.js";
+import { MapPin, ChevronRight, Check, Image, Video } from "lucide-react";
 
 const steps = ["Size & type", "Location", "Media", "Confirm"];
 
@@ -112,12 +113,20 @@ export default function BookingSection() {
 
   if (success) {
     return (
-      <section id="booking" className="scroll-mt-20 py-20 bg-forest-green-50">
-        <div className="container mx-auto px-4 text-center max-w-lg mx-auto">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white p-8 rounded-xl shadow-lg border border-forest-green-200">
-            <p className="text-forest-green-700 font-semibold text-lg">Booking request submitted.</p>
-            <p className="text-gray-600 mt-2">We'll review and get in touch. Track status in your dashboard.</p>
-            <Link to="/dashboard" className="btn-primary mt-6 inline-block">Go to Dashboard</Link>
+      <section id="booking" className="scroll-mt-24 py-24 bg-sage">
+        <div className="container mx-auto px-4 max-w-lg mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+            className="card-organic p-10"
+          >
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-forest-green-100">
+              <Check className="h-8 w-8 text-forest-green-600" />
+            </div>
+            <h3 className="font-display text-2xl font-bold text-forest-green-900 mb-2">Booking submitted</h3>
+            <p className="text-forest-green-700 mb-6">We'll review and get in touch. Track status in your dashboard.</p>
+            <Link to="/dashboard" className="btn-primary inline-flex gap-2">Go to Dashboard</Link>
           </motion.div>
         </div>
       </section>
@@ -125,29 +134,49 @@ export default function BookingSection() {
   }
 
   return (
-    <section id="booking" className="scroll-mt-20 py-20 bg-forest-green-50">
+    <section id="booking" className="scroll-mt-24 py-24 bg-sage">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-forest-green-900 mb-2">Book Rooftop Service</h2>
-          <p className="text-gray-600 mb-6">Multi-step: size → location → media (optional) → submit.</p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-2xl mx-auto"
+        >
+          <div className="text-center mb-8">
+            <h2 className="font-display text-4xl font-bold text-forest-green-900 mb-2">Book Rooftop Service</h2>
+            <p className="text-forest-green-700/90">Size → Location → Media (optional) → Submit</p>
+          </div>
 
-          <div className="flex gap-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-8">
             {steps.map((s, i) => (
               <span
                 key={s}
-                className={`px-3 py-1 rounded-full text-sm ${step > i + 1 ? "bg-forest-green-600 text-white" : step === i + 1 ? "bg-forest-green-200 text-forest-green-900" : "bg-gray-200 text-gray-500"}`}
+                className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all ${
+                  step > i + 1
+                    ? "bg-forest-green-600 text-white"
+                    : step === i + 1
+                    ? "bg-forest-green-200 text-forest-green-900 ring-2 ring-forest-green-400"
+                    : "bg-forest-green-100/60 text-forest-green-500"
+                }`}
               >
                 {i + 1}. {s}
               </span>
             ))}
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-lg border border-forest-green-100">
+          <motion.div layout className="card-organic p-8 sm:p-10">
             <AnimatePresence mode="wait">
               {step === 1 && (
-                <motion.div key="1" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="space-y-4">
+                <motion.div
+                  key="1"
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 16 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-5"
+                >
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Rooftop size (sq ft)</label>
+                    <label className="mb-2 block text-sm font-semibold text-forest-green-800">Rooftop size (sq ft)</label>
                     <input
                       type="number"
                       min={50}
@@ -155,78 +184,191 @@ export default function BookingSection() {
                       value={rooftopSize}
                       onChange={(e) => setRooftopSize(e.target.value)}
                       placeholder="e.g. 500"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-green-500"
+                      className="input-organic"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">System type</label>
-                    <select value={systemType} onChange={(e) => setSystemType(e.target.value)} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-green-500">
+                    <label className="mb-2 block text-sm font-semibold text-forest-green-800">System type</label>
+                    <select
+                      value={systemType}
+                      onChange={(e) => setSystemType(e.target.value)}
+                      className="input-organic"
+                    >
                       <option value="soil">Soil (₹100/sq ft)</option>
                       <option value="hydro">Hydroponic (₹250/sq ft)</option>
                     </select>
                   </div>
-                  {error && <p className="text-red-600 text-sm">{error}</p>}
-                  <button type="button" onClick={fetchEstimate} className="btn-primary w-full">Get quote & next</button>
+                  {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+                  <button type="button" onClick={fetchEstimate} className="btn-primary w-full gap-2">
+                    Get quote & continue
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
                 </motion.div>
               )}
 
               {step === 2 && (
-                <motion.div key="2" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="space-y-4">
-                  {estimate && <p className="text-forest-green-700 font-medium">Estimate: ₹{estimate.estimatedPriceINR?.toLocaleString()}</p>}
-                  <input type="text" placeholder="Address" value={location.address} onChange={(e) => setLocation((l) => ({ ...l, address: e.target.value }))} className="w-full px-4 py-3 border rounded-lg" required />
-                  <div className="grid grid-cols-2 gap-4">
-                    <input type="text" placeholder="City" value={location.city} onChange={(e) => setLocation((l) => ({ ...l, city: e.target.value }))} className="w-full px-4 py-3 border rounded-lg" required />
-                    <input type="text" placeholder="State" value={location.state} onChange={(e) => setLocation((l) => ({ ...l, state: e.target.value }))} className="w-full px-4 py-3 border rounded-lg" required />
+                <motion.div
+                  key="2"
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 16 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-5"
+                >
+                  {estimate && (
+                    <p className="rounded-xl bg-forest-green-100 px-4 py-3 font-semibold text-forest-green-800">
+                      Estimate: ₹{estimate.estimatedPriceINR?.toLocaleString()}
+                    </p>
+                  )}
+                  <div className="flex items-center gap-2 text-forest-green-700 mb-2">
+                    <MapPin className="w-4 h-4" />
+                    <span className="text-sm font-semibold">Location</span>
                   </div>
-                  <input type="text" placeholder="Pincode" value={location.pincode} onChange={(e) => setLocation((l) => ({ ...l, pincode: e.target.value }))} className="w-full px-4 py-3 border rounded-lg" required />
-                  {error && <p className="text-red-600 text-sm">{error}</p>}
-                  <div className="flex gap-2">
-                    <button type="button" onClick={() => setStep(1)} className="btn-secondary flex-1">Back</button>
-                    <button type="button" onClick={() => setStep(3)} className="btn-primary flex-1">Next</button>
+                  <input
+                    type="text"
+                    placeholder="Address"
+                    value={location.address}
+                    onChange={(e) => setLocation((l) => ({ ...l, address: e.target.value }))}
+                    className="input-organic"
+                    required
+                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="City"
+                      value={location.city}
+                      onChange={(e) => setLocation((l) => ({ ...l, city: e.target.value }))}
+                      className="input-organic"
+                      required
+                    />
+                    <input
+                      type="text"
+                      placeholder="State"
+                      value={location.state}
+                      onChange={(e) => setLocation((l) => ({ ...l, state: e.target.value }))}
+                      className="input-organic"
+                      required
+                    />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Pincode"
+                    value={location.pincode}
+                    onChange={(e) => setLocation((l) => ({ ...l, pincode: e.target.value }))}
+                    className="input-organic"
+                    required
+                  />
+                  {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+                  <div className="flex gap-3 pt-2">
+                    <button type="button" onClick={() => setStep(1)} className="btn-secondary flex-1">
+                      Back
+                    </button>
+                    <button type="button" onClick={() => setStep(3)} className="btn-primary flex-1 gap-2">
+                      Next
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
                   </div>
                 </motion.div>
               )}
 
               {step === 3 && (
-                <motion.div key="3" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="space-y-4">
-                  <p className="text-sm text-gray-600">Upload 1 video or up to 3 images of your roof (optional). Requires Cloudinary config.</p>
+                <motion.div
+                  key="3"
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 16 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-5"
+                >
+                  <p className="text-forest-green-700/90 text-sm">
+                    Upload 1 video or up to 3 images of your roof (optional). Requires Cloudinary config.
+                  </p>
                   {!media.video && (
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Video</label>
-                      <input type="file" accept="video/*" onChange={handleVideoSelect} disabled={uploading} className="w-full text-sm" />
+                    <div className="rounded-xl border-2 border-dashed border-forest-green-200 bg-forest-green-50/50 p-4">
+                      <label className="flex cursor-pointer items-center gap-3">
+                        <Video className="w-5 h-5 text-forest-green-600" />
+                        <span className="text-sm font-medium text-forest-green-700">Add video</span>
+                        <input
+                          type="file"
+                          accept="video/*"
+                          onChange={handleVideoSelect}
+                          disabled={uploading}
+                          className="hidden"
+                        />
+                      </label>
                     </div>
                   )}
                   {media.images.length < 3 && (
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Images ({media.images.length}/3)</label>
-                      <input type="file" accept="image/*" multiple onChange={handleImageSelect} disabled={uploading} className="w-full text-sm" />
+                    <div className="rounded-xl border-2 border-dashed border-forest-green-200 bg-forest-green-50/50 p-4">
+                      <label className="flex cursor-pointer items-center gap-3">
+                        <Image className="w-5 h-5 text-forest-green-600" />
+                        <span className="text-sm font-medium text-forest-green-700">
+                          Add images ({media.images.length}/3)
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleImageSelect}
+                          disabled={uploading}
+                          className="hidden"
+                        />
+                      </label>
                     </div>
                   )}
-                  {uploading && <p className="text-sm text-gray-500">Uploading…</p>}
-                  {error && <p className="text-red-600 text-sm">{error}</p>}
-                  <div className="flex gap-2">
-                    <button type="button" onClick={() => setStep(2)} className="btn-secondary flex-1">Back</button>
-                    <button type="button" onClick={() => setStep(4)} className="btn-primary flex-1">Next</button>
+                  {uploading && <p className="text-sm text-forest-green-600">Uploading…</p>}
+                  {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+                  <div className="flex gap-3 pt-2">
+                    <button type="button" onClick={() => setStep(2)} className="btn-secondary flex-1">
+                      Back
+                    </button>
+                    <button type="button" onClick={() => setStep(4)} className="btn-primary flex-1 gap-2">
+                      Next
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
                   </div>
                 </motion.div>
               )}
 
               {step === 4 && (
-                <motion.div key="4" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-                  <p className="text-gray-700">{rooftopSize} sq ft, {systemType} · ₹{estimate?.estimatedPriceINR?.toLocaleString()}</p>
-                  <p className="text-sm text-gray-600">{location.address}, {location.city}, {location.state} - {location.pincode}</p>
-                  {!isAuthenticated && <p className="text-amber-700 text-sm">Log in to submit this booking.</p>}
-                  {error && <p className="text-red-600 text-sm">{error}</p>}
-                  <div className="flex gap-2">
-                    <button type="button" onClick={() => setStep(3)} className="btn-secondary flex-1">Back</button>
-                    <button type="button" onClick={handleSubmit} disabled={submitLoading || !isAuthenticated} className="btn-primary flex-1">
+                <motion.div
+                  key="4"
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-5"
+                >
+                  <div className="rounded-xl bg-forest-green-50 p-4 space-y-1">
+                    <p className="font-semibold text-forest-green-900">
+                      {rooftopSize} sq ft · {systemType} · ₹{estimate?.estimatedPriceINR?.toLocaleString()}
+                    </p>
+                    <p className="text-sm text-forest-green-700">
+                      {location.address}, {location.city}, {location.state} – {location.pincode}
+                    </p>
+                  </div>
+                  {!isAuthenticated && (
+                    <p className="rounded-xl bg-amber-50 px-4 py-3 text-sm font-medium text-amber-800">
+                      Log in to submit this booking.
+                    </p>
+                  )}
+                  {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
+                  <div className="flex gap-3 pt-2">
+                    <button type="button" onClick={() => setStep(3)} className="btn-secondary flex-1">
+                      Back
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      disabled={submitLoading || !isAuthenticated}
+                      className="btn-primary flex-1 gap-2"
+                    >
                       {submitLoading ? "Submitting…" : "Submit booking"}
                     </button>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>

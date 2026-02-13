@@ -30,53 +30,68 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-forest-green-50 to-white px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-hero bg-leaf-pattern px-4 py-12">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
         className="w-full max-w-md"
       >
-        <div className="flex justify-center mb-6">
-          <Link to="/" className="flex items-center gap-2 text-forest-green-800 font-semibold">
-            <Leaf className="w-10 h-10 text-forest-green-600" />
-            Leafinity
-          </Link>
-        </div>
-        <div className="bg-white rounded-2xl shadow-lg border border-forest-green-100 p-8">
-          <h1 className="text-2xl font-bold text-forest-green-900 mb-6">Log in</h1>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <Link
+          to="/"
+          className="mb-8 flex justify-center gap-2.5 rounded-2xl py-2 pr-3 transition-colors hover:bg-white/60"
+        >
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-forest-green-600 shadow-soft">
+            <Leaf className="h-6 w-6 text-white" strokeWidth={2} />
+          </div>
+          <span className="font-display text-2xl font-bold text-forest-green-900">Leafinity</span>
+        </Link>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="card-organic p-8 sm:p-10"
+        >
+          <h1 className="font-display text-2xl font-bold text-forest-green-900 mb-6">Log in</h1>
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="mb-2 block text-sm font-semibold text-forest-green-800">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-green-500 focus:border-forest-green-500"
+                className="input-organic"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <label className="mb-2 block text-sm font-semibold text-forest-green-800">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-forest-green-500 focus:border-forest-green-500"
+                className="input-organic"
               />
             </div>
-            {error && <p className="text-red-600 text-sm">{error}</p>}
-            <button type="submit" disabled={loading} className="btn-primary w-full">
+            {error && <p className="rounded-xl bg-red-50 px-4 py-2 text-sm font-medium text-red-700">{error}</p>}
+            <motion.button
+              type="submit"
+              disabled={loading}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              className="btn-primary w-full"
+            >
               {loading ? "Signing in…" : "Sign in"}
-            </button>
+            </motion.button>
           </form>
-          <p className="mt-4 text-center text-gray-600 text-sm">
+          <p className="mt-6 text-center text-forest-green-700 text-sm">
             Don't have an account?{" "}
-            <Link to="/register" className="text-forest-green-600 font-medium hover:underline">
+            <Link to="/register" className="font-semibold text-forest-green-600 hover:underline">
               Register
             </Link>
           </p>
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   );

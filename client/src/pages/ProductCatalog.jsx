@@ -16,6 +16,8 @@ const CATEGORIES = [
   { value: "monitoring-tools", label: "Monitoring" },
 ];
 
+const placeholderImage = "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=400&fit=crop";
+
 export default function ProductCatalog() {
   const [searchParams, setSearchParams] = useSearchParams();
   const category = searchParams.get("category") || "";
@@ -38,7 +40,7 @@ export default function ProductCatalog() {
   const getCartQty = (productId) => cartItems.find((i) => i.productId === productId)?.quantity ?? 0;
 
   const handleAddToCart = (p) => {
-    dispatch(addToCart({ productId: p._id, name: p.name, price: p.price, quantity: 1, image: p.images?.[0] }));
+    dispatch(addToCart({ productId: p._id, name: p.name, price: p.price, quantity: 1, image: p.images?.[0] || placeholderImage }));
   };
 
   const handleQuantity = (p, delta) => {
@@ -46,44 +48,75 @@ export default function ProductCatalog() {
     const newQty = qty + delta;
     if (newQty <= 0) dispatch(setQuantity({ productId: p._id, quantity: 0 }));
     else if (newQty <= p.stock) {
-      if (qty === 0) dispatch(addToCart({ productId: p._id, name: p.name, price: p.price, quantity: newQty, image: p.images?.[0] }));
+      if (qty === 0) dispatch(addToCart({ productId: p._id, name: p.name, price: p.price, quantity: newQty, image: p.images?.[0] || placeholderImage }));
       else dispatch(setQuantity({ productId: p._id, quantity: newQty }));
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-forest-green-800 font-semibold">
-            <Leaf className="w-8 h-8 text-forest-green-600" />
-            Leafinity
+    <div className="min-h-screen bg-gradient-organic">
+      <header className="sticky top-0 z-10 border-b border-forest-green-100/80 bg-white/80 backdrop-blur-xl">
+        <div className="container mx-auto flex items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <Link to="/" className="flex items-center gap-2.5 rounded-2xl py-2 pr-3 transition-colors hover:bg-forest-green-50">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-forest-green-600 shadow-soft">
+              <Leaf className="h-5 w-5 text-white" strokeWidth={2} />
+            </div>
+            <span className="font-display text-xl font-bold text-forest-green-900">Leafinity</span>
           </Link>
-          <Link to="/cart" className="flex items-center gap-2 text-forest-green-700 font-medium">
-            <ShoppingCart className="w-5 h-5" />
-            Cart {cartCount > 0 && `(${cartCount})`}
+          <Link
+            to="/cart"
+            className="flex items-center gap-2 rounded-2xl bg-forest-green-100 px-4 py-2.5 font-semibold text-forest-green-800 transition-all hover:bg-forest-green-200"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            Cart {cartCount > 0 && <span className="rounded-full bg-forest-green-600 px-2 py-0.5 text-sm text-white">{cartCount}</span>}
           </Link>
         </div>
       </header>
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-forest-green-900 mb-4">Shop</h1>
-        <div className="flex flex-wrap gap-2 mb-6">
+
+      <main className="container mx-auto px-4 py-10 sm:px-6 lg:px-8">
+        <motion.h1
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="font-display text-3xl font-bold text-forest-green-900 sm:text-4xl mb-6"
+        >
+          Shop
+        </motion.h1>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="flex flex-wrap gap-2 mb-8"
+        >
           {CATEGORIES.map((c) => (
             <button
               key={c.value}
               onClick={() => setCategoryFilter(c.value)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                category === c.value ? "bg-forest-green-600 text-white" : "bg-white border border-gray-300 text-gray-700 hover:bg-forest-green-50"
+              className={`rounded-xl px-4 py-2.5 text-sm font-semibold transition-all ${
+                category === c.value
+                  ? "bg-forest-green-600 text-white shadow-soft"
+                  : "bg-white text-forest-green-700 shadow-soft hover:bg-forest-green-50 border border-forest-green-100"
               }`}
             >
               {c.label}
             </button>
           ))}
-        </div>
+        </motion.div>
+
         {loading ? (
-          <p className="text-gray-500">Loading products…</p>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-wrap gap-6">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className="h-80 w-full max-w-[280px] animate-pulse rounded-3xl bg-forest-green-100/50" />
+            ))}
+          </motion.div>
         ) : products.length === 0 ? (
-          <p className="text-gray-500">No products found. Run <code className="bg-gray-200 px-1 rounded">npm run seed</code> in server.</p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-3xl border border-forest-green-100 bg-white p-12 text-center shadow-soft"
+          >
+            <p className="text-forest-green-700 mb-4">No products found. Run <code className="rounded-lg bg-forest-green-100 px-2 py-1 text-sm">npm run seed</code> in server.</p>
+            <Link to="/" className="btn-primary inline-flex">Back to home</Link>
+          </motion.div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.map((p, i) => (
@@ -91,34 +124,50 @@ export default function ProductCatalog() {
                 key={p._id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.03 }}
-                className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                transition={{ duration: 0.35, delay: i * 0.04 }}
+                whileHover={{ y: -4 }}
+                className="card-organic group overflow-hidden"
               >
-                <div className="aspect-square bg-forest-green-50 flex items-center justify-center text-4xl text-forest-green-300">
-                  {p.images?.[0] ? <img src={p.images[0]} alt="" className="w-full h-full object-cover" /> : "🪴"}
+                <div className="relative aspect-square overflow-hidden bg-forest-green-50">
+                  {(p.images?.[0] || placeholderImage).startsWith("http") ? (
+                    <img
+                      src={p.images?.[0] || placeholderImage}
+                      alt={p.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-6xl text-forest-green-300">🪴</div>
+                  )}
+                  <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-forest-green-700 backdrop-blur-sm">
+                    {p.category.replace(/-/g, " ")}
+                  </span>
+                  {p.stock <= 10 && p.stock > 0 && (
+                    <span className="absolute right-3 top-3 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-800">
+                      {p.stock} left
+                    </span>
+                  )}
                 </div>
-                <div className="p-4">
-                  <p className="text-xs text-forest-green-600 font-medium uppercase">{p.category}</p>
-                  <h3 className="font-semibold text-gray-900 mt-1">{p.name}</h3>
-                  <p className="text-sm text-gray-500 line-clamp-2 mt-1">{p.description}</p>
-                  <div className="mt-4 flex items-center justify-between gap-2">
-                    <span className="text-lg font-bold text-forest-green-700">₹{p.price?.toLocaleString()}</span>
+                <div className="p-5">
+                  <h3 className="font-display text-lg font-bold text-forest-green-900 line-clamp-2">{p.name}</h3>
+                  <p className="mt-1 line-clamp-2 text-sm text-forest-green-700/80">{p.description}</p>
+                  <div className="mt-4 flex items-center justify-between gap-3">
+                    <span className="text-xl font-bold text-forest-green-700">₹{p.price?.toLocaleString()}</span>
                     {getCartQty(p._id) > 0 ? (
-                      <div className="flex items-center gap-1 border border-forest-green-200 rounded-lg overflow-hidden bg-white">
+                      <div className="flex items-center rounded-xl border-2 border-forest-green-200 bg-forest-green-50/50 overflow-hidden">
                         <button
                           type="button"
                           onClick={() => handleQuantity(p, -1)}
-                          className="p-2 text-forest-green-700 hover:bg-forest-green-50 transition-colors"
+                          className="p-2.5 text-forest-green-700 hover:bg-forest-green-100 transition-colors"
                           aria-label="Decrease quantity"
                         >
                           <Minus className="w-4 h-4" />
                         </button>
-                        <span className="min-w-[2rem] text-center font-medium text-gray-900 py-1">{getCartQty(p._id)}</span>
+                        <span className="min-w-[2.25rem] text-center font-semibold text-forest-green-900 py-1">{getCartQty(p._id)}</span>
                         <button
                           type="button"
                           onClick={() => handleQuantity(p, 1)}
                           disabled={getCartQty(p._id) >= p.stock}
-                          className="p-2 text-forest-green-700 hover:bg-forest-green-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="p-2.5 text-forest-green-700 hover:bg-forest-green-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           aria-label="Increase quantity"
                         >
                           <Plus className="w-4 h-4" />
@@ -128,14 +177,13 @@ export default function ProductCatalog() {
                       <button
                         onClick={() => handleAddToCart(p)}
                         disabled={p.stock < 1}
-                        className="btn-primary text-sm py-2 px-4"
+                        className="btn-primary text-sm py-2.5 px-4 disabled:opacity-50"
                       >
                         Add to cart
                       </button>
                     )}
                   </div>
-                  {p.stock <= 10 && p.stock > 0 && <p className="text-xs text-amber-600 mt-1">Only {p.stock} left</p>}
-                  {p.stock < 1 && <p className="text-xs text-red-600 mt-1">Out of stock</p>}
+                  {p.stock < 1 && <p className="mt-2 text-xs font-medium text-red-600">Out of stock</p>}
                 </div>
               </motion.div>
             ))}
