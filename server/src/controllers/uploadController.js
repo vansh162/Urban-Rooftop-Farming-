@@ -27,7 +27,7 @@ export const uploadImage = async (req, res) => {
         folder: "leafinity/rooftops",
         resource_type: "image",
       });
-      return res.json({ url: result.secure_url, publicId: result.public_id });
+      return res.json({ provider: "cloudinary", url: result.secure_url, publicId: result.public_id });
     } catch (err) {
       return res.status(500).json({ error: err.message || "Upload failed" });
     }
@@ -49,7 +49,7 @@ export const uploadImage = async (req, res) => {
     const filepath = path.join(uploadsDir, filename);
     await fs.promises.writeFile(filepath, buffer);
     const url = `${req.protocol}://${req.get("host")}/uploads/images/${filename}`;
-    return res.json({ url, local: true });
+    return res.json({ provider: "local", url, local: true });
   } catch (err) {
     return res.status(500).json({ error: err.message || "Local save failed" });
   }
@@ -65,7 +65,7 @@ export const uploadVideo = async (req, res) => {
         folder: "leafinity/rooftops",
         resource_type: "video",
       });
-      return res.json({ url: result.secure_url, publicId: result.public_id });
+      return res.json({ provider: "cloudinary", url: result.secure_url, publicId: result.public_id });
     } catch (err) {
       return res.status(500).json({ error: err.message || "Upload failed" });
     }
@@ -86,7 +86,7 @@ export const uploadVideo = async (req, res) => {
     const filepath = path.join(uploadsDir, filename);
     await fs.promises.writeFile(filepath, buffer);
     const url = `${req.protocol}://${req.get("host")}/uploads/videos/${filename}`;
-    return res.json({ url, local: true });
+    return res.json({ provider: "local", url, local: true });
   } catch (err) {
     return res.status(500).json({ error: err.message || "Local save failed" });
   }

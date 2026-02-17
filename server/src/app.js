@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+import mongoose from "mongoose";
 
 import { requireAuth } from "./middleware/requireAuth.js";
 import { requireRole } from "./middleware/requireRole.js";
@@ -34,7 +35,11 @@ app.use(
 );
 
 app.get("/api/health", (req, res) => {
-  res.json({ ok: true, service: "leafinity-api" });
+  res.json({
+    ok: true,
+    service: "leafinity-api",
+    dbState: mongoose.connection.readyState // 0=disconnected,1=connected,2=connecting,3=disconnecting
+  });
 });
 
 app.use("/api/auth", authRoutes);

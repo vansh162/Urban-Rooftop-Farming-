@@ -28,13 +28,13 @@ export const register = async (req, res) => {
       role: role === "admin" ? "admin" : "customer",
     });
     const token = jwt.sign(
-      { userId: user._id },
+      { userId: user._id.toString() },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
     res.cookie(COOKIE_NAME, token, COOKIE_OPTIONS);
     res.status(201).json({
-      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+      user: { id: user._id.toString(), name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
     res.status(500).json({ error: err.message || "Registration failed" });
@@ -52,13 +52,13 @@ export const login = async (req, res) => {
       return res.status(401).json({ error: "Invalid email or password" });
     }
     const token = jwt.sign(
-      { userId: user._id },
+      { userId: user._id.toString() },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
     res.cookie(COOKIE_NAME, token, COOKIE_OPTIONS);
     res.json({
-      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+      user: { id: user._id.toString(), name: user.name, email: user.email, role: user.role },
     });
   } catch (err) {
     res.status(500).json({ error: err.message || "Login failed" });
@@ -71,6 +71,8 @@ export const logout = (req, res) => {
 };
 
 export const me = async (req, res) => {
-  const user = await User.findById(req.user.id).select("-password");
-  res.json({ user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+  const user = await User.findById(req.user.id)
+    .select("_id name email role phone address")
+    .lean();
+  res.json({ user: { ...user, id: user._id?.toString() } });
 };

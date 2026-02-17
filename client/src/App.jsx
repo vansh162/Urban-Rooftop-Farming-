@@ -14,6 +14,8 @@ import ServiceDashboard from "./pages/ServiceDashboard.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import AdminInventory from "./pages/admin/AdminInventory.jsx";
 import AdminBookings from "./pages/admin/AdminBookings.jsx";
+import AdminOrders from "./pages/admin/AdminOrders.jsx";
+import AdminOrderDetails from "./pages/admin/AdminOrderDetails.jsx";
 import AdminMaintenance from "./pages/admin/AdminMaintenance.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 
@@ -38,6 +40,8 @@ function App() {
       <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
       <Route path="/admin/inventory" element={<ProtectedRoute adminOnly><AdminInventory /></ProtectedRoute>} />
       <Route path="/admin/bookings" element={<ProtectedRoute adminOnly><AdminBookings /></ProtectedRoute>} />
+      <Route path="/admin/orders" element={<ProtectedRoute adminOnly><AdminOrders /></ProtectedRoute>} />
+      <Route path="/admin/orders/:id" element={<ProtectedRoute adminOnly><AdminOrderDetails /></ProtectedRoute>} />
       <Route path="/admin/maintenance" element={<ProtectedRoute adminOnly><AdminMaintenance /></ProtectedRoute>} />
     </Routes>
   );

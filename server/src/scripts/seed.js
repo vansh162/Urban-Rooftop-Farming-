@@ -10,15 +10,20 @@ import { products } from "../data/productSeed.js";
 async function seed() {
   await connectDb(process.env.MONGODB_URI);
 
-  const adminExists = await User.findOne({ email: "admin@leafinity.com" });
-  if (!adminExists) {
-    await User.create({
+  let adminUser = await User.findOne({ email: "admin@leafinity.com" });
+  if (!adminUser) {
+    adminUser = await User.create({
       name: "Admin",
       email: "admin@leafinity.com",
       password: await bcrypt.hash("admin123", 10),
       role: "admin",
     });
     console.log("Created admin user: admin@leafinity.com / admin123");
+  } else if (adminUser.role !== "admin") {
+    // ensure existing account has admin role
+    adminUser.role = "admin";
+    await adminUser.save();
+    console.log("Updated existing user to admin role");
   }
 
   const count = await Product.countDocuments();

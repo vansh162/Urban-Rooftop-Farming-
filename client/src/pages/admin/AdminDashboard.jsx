@@ -45,6 +45,7 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-3">
             <Link to="/admin/inventory" className={navLink}>Inventory</Link>
             <Link to="/admin/bookings" className={navLink}>Bookings</Link>
+            <Link to="/admin/orders" className={navLink}>Orders</Link>
             <Link to="/admin/maintenance" className={navLink}>Maintenance</Link>
             <span className="text-sm text-forest-green-700">Welcome, {user?.name || "Admin"}</span>
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-forest-green-600 text-white font-semibold shadow-soft">
@@ -64,25 +65,32 @@ export default function AdminDashboard() {
             i={0}
           />
           <StatCard
+            icon={<Package className="w-6 h-6" />}
+            label="Total Orders"
+            value={loading ? "…" : stats.totalOrders ?? 0}
+            color="bg-forest-green-600"
+            i={1}
+          />
+          <StatCard
             icon={<Calendar className="w-6 h-6" />}
             label="Pending Bookings"
             value={loading ? "…" : stats.newBookings ?? 0}
-            color="bg-forest-green-600"
-            i={1}
+            color="bg-forest-green-700"
+            i={2}
           />
           <StatCard
             icon={<BarChart3 className="w-6 h-6" />}
             label="Revenue (INR)"
             value={loading ? "…" : formatRevenue(stats.revenue || 0)}
-            color="bg-forest-green-700"
-            i={2}
+            color="bg-forest-green-800"
+            i={3}
           />
           <StatCard
             icon={<AlertCircle className="w-6 h-6" />}
             label="Low Stock Items"
             value={loading ? "…" : stats.lowStockItems ?? 0}
             color="bg-amber-500"
-            i={3}
+            i={4}
           />
         </div>
 
@@ -102,11 +110,18 @@ export default function AdminDashboard() {
             i={1}
           />
           <ActionCard
+            icon={<Package className="w-8 h-8" />}
+            title="Order Management"
+            description="See user orders and details"
+            to="/admin/orders"
+            i={2}
+          />
+          <ActionCard
             icon={<Users className="w-8 h-8" />}
             title="Maintenance Scheduler"
             description="Assign staff to monthly visits"
             to="/admin/maintenance"
-            i={2}
+            i={3}
           />
         </div>
       </main>

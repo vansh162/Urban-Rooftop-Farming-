@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema(
       street: String,
       city: String,
       state: String,
-      pincode: String
+      pincode: Number
     }
   },
   { timestamps: true }

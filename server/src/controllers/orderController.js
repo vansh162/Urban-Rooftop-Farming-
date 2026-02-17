@@ -58,3 +58,28 @@ export const adminList = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+export const adminGet = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id).populate("user", "name email");
+    if (!order) return res.status(404).json({ error: "Order not found" });
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const adminUpdate = async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (status && !Order.schema.path('status').enumValues.includes(status)) {
+      return res.status(400).json({ error: 'Invalid status value' });
+    }
+    const order = await Order.findByIdAndUpdate(req.params.id, { status }, { new: true }).populate("user", "name email");
+    if (!order) return res.status(404).json({ error: "Order not found" });
+    res.json(order);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+

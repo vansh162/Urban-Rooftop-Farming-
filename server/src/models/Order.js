@@ -20,7 +20,15 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "paid", "shipped", "delivered", "cancelled"],
+      enum: [
+        "pending",
+        "confirmed",      // admin has verified order
+        "paid",           // payment received (could overlap)
+        "ready to ship",  // prepared and waiting on courier
+        "shipped",
+        "delivered",
+        "cancelled",
+      ],
       default: "pending",
     },
     paymentMethod: { type: String, default: "cod" },

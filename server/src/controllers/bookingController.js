@@ -26,7 +26,7 @@ export const create = async (req, res) => {
         delete media.video;
       }
     }
-    const booking = await Booking.create({
+    const booking = new Booking({
       user: req.user.id,
       rooftopSizeSqFt,
       systemType,
@@ -34,7 +34,8 @@ export const create = async (req, res) => {
       estimatedPriceINR: estimateResult.estimatedPriceINR,
       media: media || {},
     });
-    const populated = await Booking.findById(booking._id).populate("user", "name email");
+    await booking.save();
+    const populated = await booking.populate({ path: "user", select: "id name email" });
     res.status(201).json(populated);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -45,7 +46,7 @@ export const myBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ user: req.user.id })
       .sort({ createdAt: -1 })
-      .populate("assignedStaff", "name");
+      .populate("assignedStaff", "id name");
     res.json(bookings);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -58,8 +59,8 @@ export const adminList = async (req, res) => {
     const filter = status ? { status } : {};
     const bookings = await Booking.find(filter)
       .sort({ createdAt: -1 })
-      .populate("user", "name email phone")
-      .populate("assignedStaff", "name");
+      .populate("user", "id name email phone")
+      .populate("assignedStaff", "id name");
     res.json(bookings);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -69,8 +70,9 @@ export const adminList = async (req, res) => {
 export const adminGetOne = async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id)
-      .populate("user", "name email phone address")
-      .populate("assignedStaff", "name");
+      .populate("user", "id name email phone address")
+      .populate("assignedStaff", "id name")
+      .populate("maintenanceSchedule.staffAssigned", "id name");
     if (!booking) return res.status(404).json({ error: "Booking not found" });
     res.json(booking);
   } catch (err) {
@@ -80,20 +82,19 @@ export const adminGetOne = async (req, res) => {
 
 export const adminUpdate = async (req, res) => {
   try {
-    const { status, siteVisitDate, assignedStaff, notes, maintenanceSchedule } = req.body;
+    const { status, siteVisitDate, assignedStaffId, notes, maintenanceSchedule: newSchedule } = req.body;
     const update = {};
     if (status !== undefined) update.status = status;
     if (siteVisitDate !== undefined) update.siteVisitDate = siteVisitDate;
-    if (assignedStaff !== undefined) update.assignedStaff = assignedStaff;
+    if (assignedStaffId !== undefined) update.assignedStaff = assignedStaffId;
     if (notes !== undefined) update.notes = notes;
-    if (maintenanceSchedule !== undefined) update.maintenanceSchedule = maintenanceSchedule;
-    const booking = await Booking.findByIdAndUpdate(
-      req.params.id,
-      update,
-      { new: true }
-    )
-      .populate("user", "name email")
-      .populate("assignedStaff", "name");
+    if (newSchedule !== undefined) update.maintenanceSchedule = newSchedule;
+
+    const booking = await Booking.findByIdAndUpdate(req.params.id, update, { new: true })
+      .populate("user", "id name email")
+      .populate("assignedStaff", "id name")
+      .populate("maintenanceSchedule.staffAssigned", "id name");
+    
     if (!booking) return res.status(404).json({ error: "Booking not found" });
     res.json(booking);
   } catch (err) {

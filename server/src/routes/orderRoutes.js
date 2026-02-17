@@ -9,5 +9,7 @@ router.post("/", requireAuth, orderController.create);
 router.get("/my", requireAuth, orderController.myOrders);
 
 router.get("/admin", requireAuth, requireRole("admin"), orderController.adminList);
+router.get("/admin/:id", requireAuth, requireRole("admin"), orderController.adminGet);
+router.patch("/admin/:id", requireAuth, requireRole("admin"), orderController.adminUpdate);
 
 export default router;

@@ -45,6 +45,8 @@ export const orders = {
   create: (body) => request("/orders", { method: "POST", body: JSON.stringify(body) }),
   my: () => request("/orders/my"),
   adminList: () => request("/orders/admin"),
+  adminGet: (id) => request(`/orders/admin/${id}`),
+  adminUpdate: (id, body) => request(`/orders/admin/${id}`, { method: "PATCH", body: JSON.stringify(body) }),
 };
 
 export const upload = {
