@@ -10,14 +10,16 @@
       "config": { "includeFiles": "server/**" }
     },
     {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "src": "client/dist/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-    { "src": "/api(.*)", "dest": "server/src/index.js" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    { "src": "/api/(.*)", "dest": "server/api/index.js" },
+    { "src": "/uploads/(.*)", "dest": "server/public/uploads/$1" },
+    { "src": "/vite.svg", "dest": "client/dist/vite.svg" },
+    { "src": "/assets/(.*)", "dest": "client/dist/assets/$1" },
+    { "src": "/(.*)", "dest": "client/dist/index.html" }
   ],
   "env": {
     "NODE_ENV": "production",
@@ -27,8 +29,5 @@
     "CLOUDINARY_API_KEY": "@CLOUDINARY_API_KEY",
     "CLOUDINARY_API_SECRET": "@CLOUDINARY_API_SECRET",
     "CLIENT_ORIGIN": "@CLIENT_ORIGIN"
-  },
-  "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/:path*" }
-  ]
+  }
 }

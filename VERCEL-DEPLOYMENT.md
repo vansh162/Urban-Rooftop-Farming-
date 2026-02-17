@@ -94,6 +94,21 @@ git push
 - Ensure all env vars are set
 - Check MongoDB connection string allows Vercel IPs (MongoDB Atlas → Network Access)
 
+### 401 Errors on static assets (/vite.svg, /assets/*)
+
+**This happens when routes aren't configured correctly**
+
+- Verify `vercel.json` has explicit routes for static files BEFORE the catch-all route:
+  ```json
+  "routes": [
+    { "src": "/api/(.*)", "dest": "server/api/index.js" },
+    { "src": "/assets/(.*)", "dest": "client/dist/assets/$1" },
+    { "src": "/(.*)", "dest": "client/dist/index.html" }
+  ]
+  ```
+- **After fixing `vercel.json`, redeploy:** `git push` or click **Redeploy** in dashboard
+- Clear browser cache (Cmd+Shift+Del or Ctrl+Shift+Del)
+
 ### CORS errors
 
 - Verify `CLIENT_ORIGIN` matches your Vercel domain
