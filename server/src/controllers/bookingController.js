@@ -17,6 +17,15 @@ export const create = async (req, res) => {
     if (!estimateResult.success) {
       return res.status(400).json({ error: estimateResult.error });
     }
+    // Validate media: 1 video and/or up to 3 images
+    if (media) {
+      if (media.images && media.images.length > 3) {
+        return res.status(400).json({ error: "Maximum 3 images allowed." });
+      }
+      if (media.video && typeof media.video === "string" && media.video.length === 0) {
+        delete media.video;
+      }
+    }
     const booking = await Booking.create({
       user: req.user.id,
       rooftopSizeSqFt,

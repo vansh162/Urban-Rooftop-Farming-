@@ -10,7 +10,7 @@ const PRICING = {
     maxSize: 10000 // Maximum 10000 sq ft
   },
   hydro: {
-    baseRatePerSqFt: 250, // ₹250 per sq ft for hydroponic systems
+    baseRatePerSqFt: 350, // ₹350 per sq ft for hydroponic systems
     minSize: 50,
     maxSize: 10000
   }

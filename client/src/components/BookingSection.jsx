@@ -101,7 +101,7 @@ export default function BookingSection() {
         systemType,
         location,
         estimatedPriceINR: estimate.estimatedPriceINR,
-        media: media.video ? { video: media.video } : media.images.length ? { images: media.images } : {},
+        media,
       });
       setSuccess(true);
     } catch (err) {
@@ -144,7 +144,7 @@ export default function BookingSection() {
         >
           <div className="text-center mb-8">
             <h2 className="font-display text-4xl font-bold text-forest-green-900 mb-2">Book Rooftop Service</h2>
-            <p className="text-forest-green-700/90">Size → Location → Media (optional) → Submit</p>
+            <p className="text-forest-green-700/90">Size → Location → Media → Submit</p>
           </div>
 
           <div className="flex flex-wrap gap-2 mb-8">
@@ -195,7 +195,7 @@ export default function BookingSection() {
                       className="input-organic"
                     >
                       <option value="soil">Soil (₹100/sq ft)</option>
-                      <option value="hydro">Hydroponic (₹250/sq ft)</option>
+                      <option value="hydro">Hydroponic (₹350/sq ft)</option>
                     </select>
                   </div>
                   {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
@@ -281,23 +281,8 @@ export default function BookingSection() {
                   className="space-y-5"
                 >
                   <p className="text-forest-green-700/90 text-sm">
-                    Upload 1 video or up to 3 images of your roof (optional). Requires Cloudinary config.
+                    Upload videos and/or images of your roof. Supports up to 1 video and 3 images.
                   </p>
-                  {!media.video && (
-                    <div className="rounded-xl border-2 border-dashed border-forest-green-200 bg-forest-green-50/50 p-4">
-                      <label className="flex cursor-pointer items-center gap-3">
-                        <Video className="w-5 h-5 text-forest-green-600" />
-                        <span className="text-sm font-medium text-forest-green-700">Add video</span>
-                        <input
-                          type="file"
-                          accept="video/*"
-                          onChange={handleVideoSelect}
-                          disabled={uploading}
-                          className="hidden"
-                        />
-                      </label>
-                    </div>
-                  )}
                   {media.images.length < 3 && (
                     <div className="rounded-xl border-2 border-dashed border-forest-green-200 bg-forest-green-50/50 p-4">
                       <label className="flex cursor-pointer items-center gap-3">
@@ -316,6 +301,21 @@ export default function BookingSection() {
                       </label>
                     </div>
                   )}
+                  <div className="rounded-xl border-2 border-dashed border-forest-green-200 bg-forest-green-50/50 p-4">
+                    <label className="flex cursor-pointer items-center gap-3">
+                      <Video className="w-5 h-5 text-forest-green-600" />
+                      <span className="text-sm font-medium text-forest-green-700">
+                        {media.video ? "Change video" : "Add video"}
+                      </span>
+                      <input
+                        type="file"
+                        accept="video/*"
+                        onChange={handleVideoSelect}
+                        disabled={uploading}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
                   {uploading && <p className="text-sm text-forest-green-600">Uploading…</p>}
                   {error && <p className="text-red-600 text-sm font-medium">{error}</p>}
                   <div className="flex gap-3 pt-2">

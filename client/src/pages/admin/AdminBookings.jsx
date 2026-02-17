@@ -15,6 +15,9 @@ const statusClass = (s) => {
 export default function AdminBookings() {
   const [bookings, setBookings] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageList, setImageList] = useState([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [statusFilter, setStatusFilter] = useState("");
@@ -27,6 +30,55 @@ export default function AdminBookings() {
     load();
   }, [statusFilter]);
 
+  // Update image list when a booking is selected
+  useEffect(() => {
+    if (!selected) {
+      setImageList([]);
+      setCurrentImageIndex(0);
+      setImagePreview(null);
+      return;
+    }
+    const imgs = selected.media?.images
+      ? Array.isArray(selected.media.images)
+        ? selected.media.images
+        : [selected.media.images]
+      : [];
+    setImageList(imgs);
+  }, [selected]);
+
+  // keyboard navigation for modal
+  useEffect(() => {
+    const onKey = (e) => {
+      if (!imagePreview) return;
+      if (e.key === "Escape") return setImagePreview(null);
+      if (e.key === "ArrowRight") return goNext();
+      if (e.key === "ArrowLeft") return goPrev();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [imagePreview, imageList, currentImageIndex]);
+
+  const openGalleryAt = (index) => {
+    if (!imageList || !imageList.length) return;
+    const idx = Math.max(0, Math.min(index, imageList.length - 1));
+    setCurrentImageIndex(idx);
+    setImagePreview(imageList[idx]);
+  };
+
+  const goNext = () => {
+    if (!imageList.length) return;
+    const next = (currentImageIndex + 1) % imageList.length;
+    setCurrentImageIndex(next);
+    setImagePreview(imageList[next]);
+  };
+
+  const goPrev = () => {
+    if (!imageList.length) return;
+    const prev = (currentImageIndex - 1 + imageList.length) % imageList.length;
+    setCurrentImageIndex(prev);
+    setImagePreview(imageList[prev]);
+  };
+
   const updateStatus = async (id, status) => {
     setUpdating(true);
     try {
@@ -38,6 +90,13 @@ export default function AdminBookings() {
     } finally {
       setUpdating(false);
     }
+  };
+
+
+
+  const openAllImages = () => {
+    if (!imageList || !imageList.length) return;
+    imageList.forEach((url) => window.open(url, "_blank", "noopener,noreferrer"));
   };
 
   return (
@@ -103,19 +162,80 @@ export default function AdminBookings() {
                   <p className="flex items-start gap-2"><strong><MapPin className="inline w-4 h-4" /></strong> {selected.location?.address}, {selected.location?.city}, {selected.location?.state} - {selected.location?.pincode}</p>
                   <p><strong>Estimate:</strong> ₹{selected.estimatedPriceINR?.toLocaleString()}</p>
                   {selected.media?.video && (
-                    <p className="flex items-center gap-2">
-                      <Video className="w-4 h-4" />
-                      <a href={selected.media.video} target="_blank" rel="noopener noreferrer" className="text-forest-green-600 font-semibold hover:underline">View video</a>
-                    </p>
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Video className="w-4 h-4 shrink-0" />
+                        <span className="text-sm font-semibold text-forest-green-800">Video</span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        <a
+                          href={selected.media.video}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group relative overflow-hidden rounded-xl border border-forest-green-100 bg-black"
+                        >
+                          <video
+                            src={selected.media.video}
+                            className="h-24 w-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                            muted
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/80 group-hover:bg-white/90 transition-all">
+                              <div className="h-0 w-0 border-l-[6px] border-t-[4px] border-b-[4px] border-l-forest-green-600 border-t-transparent border-b-transparent ml-1" />
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
                   )}
-                  {selected.media?.images?.length > 0 && (
-                    <p className="flex items-center gap-2 flex-wrap">
-                      <Image className="w-4 h-4 shrink-0" />
-                      {selected.media.images.map((url, i) => (
-                        <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="text-forest-green-600 font-semibold hover:underline">[Image {i + 1}]</a>
-                      ))}
-                    </p>
+
+                  {imageList.length > 0 && (
+                    <div className="mt-2">
+                      <button
+                        type="button"
+                        onClick={() => openGalleryAt(0)}
+                        className="inline-flex items-center gap-2 rounded-xl bg-forest-green-600 px-3 py-1.5 text-sm font-semibold text-white hover:brightness-95"
+                      >
+                        View images ({imageList.length})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={openAllImages}
+                        className="ml-3 inline-flex items-center gap-2 rounded-xl bg-forest-green-100 px-3 py-1.5 text-sm font-semibold text-forest-green-800 hover:bg-forest-green-200"
+                      >
+                        Open all
+                      </button>
+                    </div>
                   )}
+
+                  {selected.media?.images && (() => {
+                    const imgs = Array.isArray(selected.media.images)
+                      ? selected.media.images
+                      : selected.media.images
+                      ? [selected.media.images]
+                      : [];
+                    if (imgs.length === 0) return null;
+                    return (
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Image className="w-4 h-4 shrink-0" />
+                          <span className="text-sm font-semibold text-forest-green-800">Images</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2">
+                          {imgs.map((url, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => setImagePreview(url)}
+                              className="overflow-hidden rounded-xl border border-forest-green-100 bg-white p-0"
+                            >
+                              <img loading="lazy" src={url} alt={`roof-${i + 1}`} className="h-24 w-full object-cover" />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
                 <div className="mt-6">
                   <label className="mb-2 block text-sm font-semibold text-forest-green-800">Update status</label>
@@ -141,6 +261,21 @@ export default function AdminBookings() {
           </div>
         )}
       </main>
+      {imagePreview && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={() => setImagePreview(null)}>
+          <div className="max-w-4xl w-full p-4">
+            <div className="relative bg-white rounded-2xl overflow-hidden">
+              <button
+                onClick={() => setImagePreview(null)}
+                className="absolute right-3 top-3 z-10 rounded-full bg-white/80 p-2 text-sm"
+              >
+                Close
+              </button>
+              <img src={imagePreview} alt="preview" className="w-full h-[70vh] object-contain bg-black" />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

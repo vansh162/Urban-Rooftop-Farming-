@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import { requireAuth } from "./middleware/requireAuth.js";
 import { requireRole } from "./middleware/requireRole.js";
@@ -17,6 +19,11 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
+
+// Serve uploaded files when Cloudinary is not configured
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use("/uploads", express.static(path.join(__dirname, "..", "public", "uploads")));
 
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:5173";
 app.use(
