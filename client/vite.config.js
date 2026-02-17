@@ -12,5 +12,17 @@ export default defineConfig({
         secure: false
       }
     }
+  },
+  build: {
+    chunkSizeWarningLimit: 1000, // 1000 kB
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom", "react-router-dom"],
+          redux: ["@reduxjs/toolkit", "react-redux"],
+          ui: ["framer-motion", "lucide-react", "tailwindcss"]
+        }
+      }
+    }
   }
 });
