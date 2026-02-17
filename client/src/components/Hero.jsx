@@ -67,7 +67,7 @@ export default function Hero() {
             Transform Your
             <br />
             <span className="bg-gradient-to-r from-forest-green-600 to-forest-green-500 bg-clip-text text-transparent">
-              top
+              Rooftop
             </span>
             <br />
             <span className="text-forest-green-700">Into a Green Oasis</span>
