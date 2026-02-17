@@ -1,0 +1,34 @@
+{
+  "name": "leafinity",
+  "version": "1.0.0",
+  "description": "Full-stack rooftop agriculture platform",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\"",
+    "build": "cd client && npm run build",
+    "serve:server": "cd server && npm start",
+    "serve:client": "cd client && npm run preview",
+    "seed": "cd server && npm run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": "20.x",
+    "npm": ">=10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/leafinity.git"
+  },
+  "keywords": [
+    "rooftop",
+    "agriculture",
+    "urban-farming",
+    "booking",
+    "e-commerce"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

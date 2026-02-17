@@ -1,6 +1,14 @@
 {
   "version": 2,
+  "buildCommand": "cd client && npm install && npm run build",
+  "outputDirectory": "client/dist",
+  "installCommand": "npm install",
   "builds": [
+    {
+      "src": "server/package.json",
+      "use": "@vercel/node",
+      "config": { "includeFiles": "server/**" }
+    },
     {
       "src": "client/package.json",
       "use": "@vercel/static-build",
@@ -8,6 +16,19 @@
     }
   ],
   "routes": [
+    { "src": "/api(.*)", "dest": "server/src/index.js" },
     { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "JWT_SECRET": "@JWT_SECRET",
+    "MONGODB_URI": "@MONGODB_URI",
+    "CLOUDINARY_CLOUD_NAME": "@CLOUDINARY_CLOUD_NAME",
+    "CLOUDINARY_API_KEY": "@CLOUDINARY_API_KEY",
+    "CLOUDINARY_API_SECRET": "@CLOUDINARY_API_SECRET",
+    "CLIENT_ORIGIN": "@CLIENT_ORIGIN"
+  },
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/:path*" }
   ]
 }
